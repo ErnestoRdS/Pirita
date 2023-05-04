@@ -1,0 +1,32 @@
+# EditorConfig helps developers define and maintain consistent coding styles between different editors and IDEs
+# For more information about the properties used in this file, please see: https://editorconfig.org
+
+# Top-most EditorConfig file
+root = true
+
+# Ignore Visual Studio temporary files, build artifacts, and dotfiles
+[**]
+# Ignore .gitignore, README.md, and LICENSE files
+ignore = .gitignore, README.md, LICENSE*
+# Set the end-of-line (EOL) character to LF (Unix-style)
+end_of_line = lf
+# Set the character encoding to UTF-8
+charset = utf-8
+# Indent with tabs, not spaces
+indent_style = tab
+# Set tab size to 4
+tab_width = 4
+
+# Go files
+[*.go]
+# Use tabs for indentation
+indent_style = tab
+# Set tab size to 4
+tab_width = 4
+
+# Svelte files
+[*.svelte]
+# Use spaces for indentation
+indent_style = space
+# Set indentation size to 2
+indent_size = 4
