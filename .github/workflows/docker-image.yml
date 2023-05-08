@@ -15,10 +15,10 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build the backend Docker image
-      run: docker build ./backend/ --file Dockerfile --tag pirita_backend:$(date +%s)
+      run: docker build ./backend/ --file ./backend/Dockerfile --tag pirita_backend:$(date +%s)
 
     - name: Build the frontend Docker image
-      run: docker build ./frontend/ --file Dockerfile --tag pirita_frontend:$(date +%s)
+      run: docker build ./frontend/ --file ./frontend/Dockerfile --tag pirita_frontend:$(date +%s)
 
     - name: Build the general project Docker image
-      run: docker build . --file Dockerfile --tag pirita_frontend:$(date +%s)
+      run: docker build . --file Dockerfile --tag pirita_stable:$(date +%s)
