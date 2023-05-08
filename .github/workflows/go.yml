@@ -25,4 +25,4 @@ jobs:
       run: cd backend/ && go mod download && go get -d -v && go build -o backend
 
     - name: Test
-      run: go test -v ./*.go
+      run: cd backend/ && go test -v ./*.go
