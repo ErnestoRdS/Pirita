@@ -15,4 +15,4 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag pirita-build-:$(date +%s)-stable
+      run: docker build . --file Dockerfile --tag pirita:$(date +%s)
