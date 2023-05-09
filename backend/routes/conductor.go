@@ -9,7 +9,7 @@ import (
 
 func conductorRouter(app *fiber.App, db *gorm.DB) {
 	// Obtener todos los conductores
-	app.Get("/api/conductors", func(c *fiber.Ctx) error {
+	app.Get("/api/conductores", func(c *fiber.Ctx) error {
 		var conductors []models.Conductor
 		if err := db.Find(&conductors).Error; err != nil {
 			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
@@ -20,7 +20,7 @@ func conductorRouter(app *fiber.App, db *gorm.DB) {
 	})
 
 	// Obtener un conductor por ID
-	app.Get("/api/conductors/:id", func(c *fiber.Ctx) error {
+	app.Get("/api/conductores/:id", func(c *fiber.Ctx) error {
 		id := c.Params("id")
 		var conductor models.Conductor
 		if err := db.First(&conductor, id).Error; err != nil {
@@ -32,7 +32,7 @@ func conductorRouter(app *fiber.App, db *gorm.DB) {
 	})
 
 	// Crear un nuevo conductor
-	app.Post("/api/conductors", func(c *fiber.Ctx) error {
+	app.Post("/api/conductores", func(c *fiber.Ctx) error {
 		var conductor models.Conductor
 		if err := c.BodyParser(&conductor); err != nil {
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
@@ -48,7 +48,7 @@ func conductorRouter(app *fiber.App, db *gorm.DB) {
 	})
 
 	// Actualizar un conductor por ID
-	app.Put("/api/conductors/:id", func(c *fiber.Ctx) error {
+	app.Put("/api/conductores/:id", func(c *fiber.Ctx) error {
 		id := c.Params("id")
 		var conductor models.Conductor
 		if err := db.First(&conductor, id).Error; err != nil {
@@ -70,7 +70,7 @@ func conductorRouter(app *fiber.App, db *gorm.DB) {
 	})
 
 	// Eliminar un conductor por ID
-	app.Delete("/api/conductors/:id", func(c *fiber.Ctx) error {
+	app.Delete("/api/conductores/:id", func(c *fiber.Ctx) error {
 		id := c.Params("id")
 		var conductor models.Conductor
 		if err := db.First(&conductor, id).Error; err != nil {
