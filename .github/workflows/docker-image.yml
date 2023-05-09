@@ -14,11 +14,23 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: Build the backend Docker image
-      run: docker build ./backend/ --file ./backend/Dockerfile --tag pirita_backend:$(date +%s)
+    - uses: docker/login-action@v1
+      with:
+      registry: ghcr.io
+      username: ${{ github.actor }}
+      password: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Build the frontend Docker image
-      run: docker build ./frontend/ --file ./frontend/Dockerfile --tag pirita_frontend:$(date +%s)
+    - name: Build and publish the backend Docker image
+      run: |
+        docker build ./backend/ --file ./backend/Dockerfile --tag pirita_backend:latest
+        docker push ghcr.io/upvent/pirita_backend:latest
 
-    - name: Build the general project Docker image
-      run: docker build . --file Dockerfile --tag pirita_stable:$(date +%s)
+    - name: Build and publish the frontend Docker image
+      run: |
+        docker build ./frontend/ --file ./frontend/Dockerfile --tag pirita_frontend:latest
+        docker push ghcr.io/upvent/pirita_frontend:latest
+
+    - name: Build and publish the general project Docker image
+      run: |
+        docker build . --file Dockerfile --tag pirita_monolith:latest
+        docker push ghcr.io/upvent/pirita_monolith:latest

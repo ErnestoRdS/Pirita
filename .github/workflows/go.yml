@@ -24,5 +24,8 @@ jobs:
     - name: Go to backend directory and build
       run: cd backend/ && go mod download && go get -d -v && go build -o backend
 
-    - name: Test
+    - name: Run Go tests
       run: cd backend/ && go test -v ./*.go
+
+    - name: Check Go coding style
+      run: cd backend/ && gofmt -d -s -e .
