@@ -23,7 +23,8 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - run: cd frontend/
+    - name: Change directory to frontend
+      working-directory: ./frontend/
     - run: npm install
     - run: npm run build --if-present
     - run: npm ci --prod
@@ -41,8 +42,6 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
-      - name: Change directory to frontend
-        working-directory: ./frontend/
       - run: cd frontend/
       - run: npm install
       - run: npm test
