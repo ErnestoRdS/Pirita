@@ -36,13 +36,13 @@ jobs:
         node-version: [18.x]
     steps:
       - uses: actions/checkout@v2
-      - name: Change directory to frontend
-        working-directory: ./frontend/
       - name: Test using Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
+      - name: Change directory to frontend
+        working-directory: ./frontend/
       - run: cd frontend/
       - run: npm install
       - run: npm test
