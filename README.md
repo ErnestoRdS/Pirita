@@ -1,5 +1,8 @@
 # 🚖 Pirita
-Proyecto para manejar taxis, ubers o vehículos particulares, hecho con Svelte y Go.
+Proyecto para administrar tus taxis, ubers o vehículos particulares, hecho con Svelte y Go.
+
+[![Docker Image CI](https://github.com/UpVent/Pirita/actions/workflows/docker-image.yml/badge.svg)](https://github.com/UpVent/Pirita/actions/workflows/docker-image.yml)
+[![Go CI](https://github.com/UpVent/Pirita/actions/workflows/go.yml/badge.svg)](https://github.com/UpVent/Pirita/actions/workflows/go.yml)
 
 ## Approach 🚀
 Para lograr los objetivos del proyecto, se utilizará una arquitectura de microservicios, lo que permitirá una mayor escalabilidad y flexibilidad. Svelte se utilizará para la interfaz de usuario y Go se utilizará para la lógica del servidor. 🏗️🕸️
