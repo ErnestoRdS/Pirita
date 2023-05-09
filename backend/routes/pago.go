@@ -1,8 +1,8 @@
 package routes
 
 import (
-	"github.com/gofiber/fiber/v2"
 	"github.com/UpVent/Pirita/v2/models"
+	"github.com/gofiber/fiber/v2"
 
 	"gorm.io/gorm"
 )
@@ -29,7 +29,6 @@ func PagosRouter(app *fiber.App, db *gorm.DB) {
 		}
 		return c.JSON(pago)
 	})
-
 
 	// Crear un nuevo pago.
 	app.Post("/api/pagos", func(c *fiber.Ctx) error {
