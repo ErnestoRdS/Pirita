@@ -11,6 +11,10 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        working-directory: frontend
+
     steps:
     - name: Checkout repo
       uses: actions/checkout@v2
@@ -22,20 +26,15 @@ jobs:
 
     - name: Install dependencies
       run: npm install
-      working-directory: ./frontend
-
+      
     - name: Build
       run: npm run build
-      working-directory: ./frontend
 
     - name: Run unit tests
       run: npm run test:unit
-      working-directory: ./frontend
 
     - name: Run linter
       run: npm run lint
-      working-directory: ./frontend
 
     - name: Check for security vulnerabilities
       run: npm audit
-      working-directory: ./frontend
