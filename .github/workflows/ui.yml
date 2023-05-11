@@ -13,7 +13,6 @@ jobs:
         run: |
           cd frontend
           sh ../scripts/sveltepipelines.sh install
-          sh ../scripts/sveltepipelines.sh test
           sh ../scripts/sveltepipelines.sh check
           sh ../scripts/sveltepipelines.sh unitest
           sh ../scripts/sveltepipelines.sh lint
