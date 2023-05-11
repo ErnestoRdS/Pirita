@@ -8,35 +8,30 @@ fi
 # Función para instalar las dependencias
 install() {
 	echo "Instalando dependencias..."
-	cd frontend/ || return 1
 	npm install
 }
 
 # Función para ejecutar los tests
 tests() {
 	echo "Ejecutando tests..."
-	cd frontend/ || return 1
 	npm run test
 }
 
 # Función para ejecutar los tests de cobertura
 check() {
 	echo "Ejecutando tests de cobertura..."
-	cd frontend/ || return 1
 	npm run check
 }
 
 # Función para ejecutar los tests unitarios
 unitest() {
 	echo "Ejecutando tests unitarios..."
-	cd frontend/ || return 1
 	npm run test:unit
 }
 
 # Función para ejecutar el linter
 lint() {
 	echo "Ejecutando linter..."
-	cd frontend/ || return 1
 	npm run lint
 }
 
