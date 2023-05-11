@@ -1,0 +1,19 @@
+name: Svelte Pipelines
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Install dependencies, build, lint, and test Svelte app
+        run: |
+          cd frontend
+          sh ../scripts/sveltepipelines.sh install
+          sh ../scripts/sveltepipelines.sh tests
+          sh ../scripts/sveltepipelines.sh check
+          sh ../scripts/sveltepipelines.sh unitest
+          sh ../scripts/sveltepipelines.sh lint
