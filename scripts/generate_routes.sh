@@ -59,7 +59,7 @@ for MODEL in "$MODELS_PATH"/*.go; do
 			}
 			if err := db.Create(&${MODEL_NAME}).Error; err != nil {
 				return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-						message": "Error al crear el ${MODEL_NAME}",
+						"message": "Error al crear el ${MODEL_NAME}",
 				})
 			}
 			return c.JSON(${MODEL_NAME})
