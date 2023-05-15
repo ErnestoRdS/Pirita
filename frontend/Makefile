@@ -1,6 +1,6 @@
 # Variables
 DOCKER_IMAGE_NAME=pirita_frontend
-DOCKER_CONTAINER_NAME=pirita-frontend
+DOCKER_CONTAINER_NAME=pirita_frontend
 
 # Generate a production build.
 build:

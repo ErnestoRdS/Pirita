@@ -1,0 +1,6 @@
+version: "3"
+
+services:
+  web:
+    # Use pirita_frontend image
+    image:
