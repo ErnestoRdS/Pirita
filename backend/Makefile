@@ -1,3 +1,6 @@
+build_backend:
+	go mod download && go get -d -v && go build -o backend && chmod +x backend
+
 build:
 	docker build -t backend .
 

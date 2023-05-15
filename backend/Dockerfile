@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY . .
 
-RUN go mod download && go get -d -v && go build -o backend
+RUN make build_backend
 
 EXPOSE 3000
 
