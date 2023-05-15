@@ -1,15 +1,18 @@
 # Variables
-DOCKER_IMAGE_NAME=frontend
+DOCKER_IMAGE_NAME=pirita_frontend
 DOCKER_CONTAINER_NAME=pirita-frontend
 
+# Generate a production build.
 build:
 	npm install
 	npm run build
 
+# Run this to start developing.
 debug:
 	npm install
 	npm run dev
 
+# Run this before pushing to git.
 test_before_push:
 	npm install
 	npm run test
@@ -18,6 +21,7 @@ test_before_push:
 	npm run lint
 	npm run format
 
+# Run this to check that everything is ok while developing.
 test:
 	npm install
 	npm run test
@@ -26,15 +30,21 @@ test:
 
 # Commands for running in containers
 
+# Build docker image
 docker-build:
+	npm install
+	npm run build
 	docker build -t $(DOCKER_IMAGE_NAME) .
 
+# Run docker container
 docker-run:
 	docker run -d -p 80:80 --name $(DOCKER_CONTAINER_NAME) $(DOCKER_IMAGE_NAME)
 
+# Stop docker container
 docker-stop:
 	docker stop $(DOCKER_CONTAINER_NAME)
 
+# Remove docker container
 docker-rm:
 	docker rm $(DOCKER_CONTAINER_NAME)
 
