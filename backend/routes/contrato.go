@@ -18,7 +18,7 @@ import (
 // - Eliminar un contrato por ID (DELETE `/api/contratos/:id`)
 //
 // Para más información sobre los contratos, ver el modelo `Contrato`.
-func contratoRouter(app *fiber.App, db *gorm.DB) {
+func ContratoRouter(app *fiber.App, db *gorm.DB) {
 	// Obtener todos los contratos
 	app.Get("/api/contratos", func(c *fiber.Ctx) error {
 		var contratos []models.Contrato

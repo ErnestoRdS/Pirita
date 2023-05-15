@@ -24,21 +24,27 @@ import (
 // Desde aquí servimos las rutas protegidas, así como las rutas públicas de la
 // API. Todo desde un UNIX socket.
 func main() {
-	// Connectarse a la base de datos.
+	// Localización de la base de datos.
 	dsn := "./db/db.sqlite"
 
+	// Abrir la base de datos.
 	db, err := gorm.Open(sqlite.Open(dsn), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Info),
 	})
 
+	// Si hay un error al conectarse a la base de datos, terminar el programa.
 	if err != nil {
 		log.Fatalf("Error al conectarse a la base de datos: %v", err)
+		os.Exit(1)
 	}
 
 	// Migrar la base de datos.
 	err = db.AutoMigrate(
 		&models.Conductor{},
+		&models.Contrato{},
 		&models.Pago{},
+		&models.Vehiculo{},
+		&models.Viaje{},
 	)
 
 	if err != nil {
@@ -46,6 +52,21 @@ func main() {
 	}
 
 	app := fiber.New()
+
+	// Montar las rutas.
+	routes.ConductorRouter(app, db)
+	routes.ContratoRouter(app, db)
+	routes.PagosRouter(app, db)
+	routes.VehiculoRouter(app, db)
+	routes.ViajeRouter(app, db)
+
+	// Rutas de observabilidad.
+	routes.ObservabilityRouter(app, db)
+
+	// Mostrar siempre un 404 en la ruta raíz.
+	app.Get("/", func(c *fiber.Ctx) error {
+		return c.SendStatus(fiber.StatusNotFound)
+	})
 
 	var listener net.Listener
 
@@ -58,7 +79,14 @@ func main() {
 			os.Exit(1)
 		}
 
+		app.Listener(listener)
+
+		log.Printf("Iniciado en el socket UNIX: %v, sistema operativo: %v",
+			listener.Addr(),
+			runtime.GOOS)
+
 		defer listener.Close()
+
 	case "windows":
 		listener, err = net.Listen("tcp", "8080")
 
@@ -67,17 +95,30 @@ func main() {
 			os.Exit(1)
 		}
 
+		log.Printf("Iniciado en el socket TCP: %v, sistema operativo: %v",
+			listener.Addr(),
+			runtime.GOOS)
+
+		app.Listener(listener)
+
 		defer listener.Close()
+	case "darwin":
+		listener, err = net.Listen("unix", "/tmp/pirita.sock")
+
+		if err != nil {
+			log.Fatalf("Error al crear el socket UNIX: %v", err)
+			os.Exit(1)
+		}
+
+		app.Listener(listener)
+
+		log.Printf("Iniciado en el socket UNIX: %v, sistema operativo: %v",
+			listener.Addr(),
+			runtime.GOOS)
+
+		defer listener.Close()
+
+	default:
+		log.Fatalf("Sistema operativo no soportado: %v", runtime.GOOS)
 	}
-
-
-	// Montar las rutas.
-	routes.PagosRouter(app, db)
-
-	app.Get("/", func(c *fiber.Ctx) error {
-		return c.SendStatus(fiber.StatusNotFound)
-	})
-
-	// Escuchar en un socket UNIX.
-	app.Listen("/tmp/pirita.sock")
 }

@@ -18,7 +18,7 @@ import (
 // - Eliminar un vehiculo por ID (DELETE `/api/vehiculos/:id`)
 //
 // Para más información sobre los contratos, ver el modelo `Vehiculo`.
-func vehiculoRouter(app *fiber.App, db *gorm.DB) {
+func VehiculoRouter(app *fiber.App, db *gorm.DB) {
 	// Obtener todos los vehiculos
 	app.Get("/api/vehiculos", func(c *fiber.Ctx) error {
 		var vehiculos []models.Vehiculo

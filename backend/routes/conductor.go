@@ -19,7 +19,7 @@ import (
 // - Eliminar un conductor por ID (DELETE `/api/conductores/:id`)
 //
 // Para más información sobre los conductores, ver el modelo `Conductor`.
-func conductorRouter(app *fiber.App, db *gorm.DB) {
+func ConductorRouter(app *fiber.App, db *gorm.DB) {
 	// Obtener todos los conductores
 	app.Get("/api/conductores", func(c *fiber.Ctx) error {
 		var conductors []models.Conductor

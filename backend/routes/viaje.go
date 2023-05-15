@@ -18,7 +18,7 @@ import (
 // - Eliminar un viaje por ID (DELETE `/api/viajes/:id`)
 //
 // Para más información sobre los contratos, ver el modelo `Viaje`.
-func viajeRouter(app *fiber.App, db *gorm.DB) {
+func ViajeRouter(app *fiber.App, db *gorm.DB) {
 	// Obtener todos los viajes
 	app.Get("/api/viajes", func(c *fiber.Ctx) error {
 		var viajes []models.Viaje
