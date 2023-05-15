@@ -1,3 +1,4 @@
+// Descripción: El paquete routes contiene todas las rutas de la API de Pirita.
 package routes
 
 import (
@@ -7,6 +8,17 @@ import (
 	"gorm.io/gorm"
 )
 
+// ConductorRouter es el router para la API de conductores de Pirita
+//
+// Las rutas de este router empiezan con `/api/conductores`
+// y se pueden agrupar en:
+// - Obtener todos los conductores (GET `/api/conductores`)
+// - Obtener un conductor por ID (GET `/api/conductores/:id`)
+// - Crear un nuevo conductor (POST `/api/conductores`)
+// - Actualizar un conductor por ID (PUT `/api/conductores/:id`)
+// - Eliminar un conductor por ID (DELETE `/api/conductores/:id`)
+//
+// Para más información sobre los conductores, ver el modelo `Conductor`.
 func conductorRouter(app *fiber.App, db *gorm.DB) {
 	// Obtener todos los conductores
 	app.Get("/api/conductores", func(c *fiber.Ctx) error {

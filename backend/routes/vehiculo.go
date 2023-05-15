@@ -7,6 +7,17 @@ import (
 	"gorm.io/gorm"
 )
 
+// VehiculoRouter es el router para la API de vehiculos de Pirita
+//
+// Las rutas de este router empiezan con `/api/vehiculos`
+// y se pueden agrupar en:
+// - Obtener todos los vehiculos (GET `/api/vehiculos`)
+// - Obtener un vehiculo por ID (GET `/api/vehiculos/:id`)
+// - Crear un nuevo vehiculo (POST `/api/vehiculos`)
+// - Actualizar un vehiculo por ID (PUT `/api/vehiculos/:id`)
+// - Eliminar un vehiculo por ID (DELETE `/api/vehiculos/:id`)
+//
+// Para más información sobre los contratos, ver el modelo `Vehiculo`.
 func vehiculoRouter(app *fiber.App, db *gorm.DB) {
 	// Obtener todos los vehiculos
 	app.Get("/api/vehiculos", func(c *fiber.Ctx) error {

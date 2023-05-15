@@ -7,6 +7,17 @@ import (
 	"gorm.io/gorm"
 )
 
+// ViajeRouter es el router para la API de viajes de Pirita
+//
+// Las rutas de este router empiezan con `/api/viajes`
+// y se pueden agrupar en:
+// - Obtener todos los viajes (GET `/api/viajes`)
+// - Obtener un viaje por ID (GET `/api/viajes/:id`)
+// - Crear un nuevo viaje (POST `/api/viajes`)
+// - Actualizar un viaje por ID (PUT `/api/viajes/:id`)
+// - Eliminar un viaje por ID (DELETE `/api/viajes/:id`)
+//
+// Para más información sobre los contratos, ver el modelo `Viaje`.
 func viajeRouter(app *fiber.App, db *gorm.DB) {
 	// Obtener todos los viajes
 	app.Get("/api/viajes", func(c *fiber.Ctx) error {

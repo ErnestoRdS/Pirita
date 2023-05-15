@@ -7,6 +7,17 @@ import (
 	"gorm.io/gorm"
 )
 
+// ContratoRouter es el router para la API de contratos de Pirita
+//
+// Las rutas de este router empiezan con `/api/contratos`
+// y se pueden agrupar en:
+// - Obtener todos los contratos (GET `/api/contratos`)
+// - Obtener un contrato por ID (GET `/api/contratos/:id`)
+// - Crear un nuevo contrato (POST `/api/contratos`)
+// - Actualizar un contrato por ID (PUT `/api/contratos/:id`)
+// - Eliminar un contrato por ID (DELETE `/api/contratos/:id`)
+//
+// Para más información sobre los contratos, ver el modelo `Contrato`.
 func contratoRouter(app *fiber.App, db *gorm.DB) {
 	// Obtener todos los contratos
 	app.Get("/api/contratos", func(c *fiber.Ctx) error {

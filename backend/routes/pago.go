@@ -7,6 +7,17 @@ import (
 	"gorm.io/gorm"
 )
 
+// PagosRouter es el router para la API de pagos de Pirita
+//
+// Las rutas de este router empiezan con `/api/pagos`
+// y se pueden agrupar en:
+// - Obtener todos los pagos (GET `/api/pagos`)
+// - Obtener un pago por ID (GET `/api/pagos/:id`)
+// - Crear un nuevo pago (POST `/api/pagos`)
+// - Actualizar un pago por ID (PUT `/api/pagos/:id`)
+// - Eliminar un pago por ID (DELETE `/api/pagos/:id`)
+//
+// Para más información sobre los contratos, ver el modelo `Pago`.
 func PagosRouter(app *fiber.App, db *gorm.DB) {
 	// Obtener todos los pagos.
 	app.Get("/api/pagos", func(c *fiber.Ctx) error {
