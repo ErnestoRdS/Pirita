@@ -1,38 +1,66 @@
-# create-svelte
+# 🌐 Pirita Frontend 🌐
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+¡Bienvenidos al proyecto "Pirita" frontend! Este es el servidor frontend que utiliza Nginx para servir nuestra aplicación.
 
-## Creating a project
+## 🔧 Compilación y ejecución
 
-If you're seeing this, you've probably already done this step. Congrats!
+### Local 🖥
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
-
-# create a new project in my-app
-npm create svelte@latest my-app
-```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+Para compilar y ejecutar el proyecto localmente, utilizaremos make. Primero, vamos a compilar el proyecto con el comando:
 
 ```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+make build
 ```
 
-## Building
+Esto instalará las dependencias necesarias y construirá la aplicación.
 
-To create a production version of your app:
+Para iniciar la aplicación en modo de desarrollo, puedes usar el comando:
 
 ```bash
-npm run build
+make debug
 ```
 
-You can preview the production build with `npm run preview`.
+Antes de hacer push a git, se recomienda ejecutar las pruebas y verificaciones necesarias con el comando:
 
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+
+```bash
+make test_before_push
+```
+
+Y durante el desarrollo, puedes correr pruebas y verificaciones rápidas con el comando:
+
+```bash
+make test
+```
+
+## Docker 🐋
+
+Aunque en este proyecto hacemos referencia a Docker y proporcionamos un Dockerfile y comandos make para trabajar con Docker, recomendamos usar Podman y Podman Desktop para manejar los contenedores, ya que consideramos que es una opción más segura y flexible.
+
+Para construir la imagen Docker (o Podman) del proyecto, puedes usar el comando:
+
+```bash
+make docker-build
+```
+
+Esto creará una imagen Docker con el nombre `pirita_frontend`.
+
+Para ejecutar la imagen en un contenedor, puedes usar el comando:
+
+```bash
+make docker-run
+```
+Esto iniciará un contenedor Docker en segundo plano con el nombre `pirita_frontend` y expondrá el puerto 80.
+
+Para detener el contenedor, puedes usar el comando:
+
+```bash
+make docker-stop
+```
+
+Y para eliminar el contenedor, puedes usar el comando:
+
+```bash
+make docker-rm
+```
+
