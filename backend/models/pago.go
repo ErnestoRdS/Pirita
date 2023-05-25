@@ -10,14 +10,14 @@ type Pago struct {
 
 	// ConductorID es el ID del conductor al que pertenece el pago. Es una llave
 	// foránea.
-	ConductorID uint    `json:"-"`
+	ConductorID uint `json:"-"`
 
 	// Fecha es la fecha en la que se realizó el pago.
-	Fecha       string  `json:"fecha"`
+	Fecha string `json:"fecha"`
 
 	// Cantidad es la cantidad que se pagó al conductor.
-	Cantidad    float64 `json:"cantidad"`
+	Cantidad float64 `json:"cantidad"`
 
 	// Notas es una nota que se puede agregar al pago.
-	Notas       string  `json:"nota"`
+	Notas string `json:"nota"`
 }

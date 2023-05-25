@@ -9,27 +9,27 @@ type Vehiculo struct {
 	gorm.Model
 
 	// Fabricante es el fabricante del vehiculo.
-	Fabricante  string `json:"Fabricante"`
+	Fabricante string `json:"Fabricante"`
 
 	// Marca es la marca del vehiculo.
-	Marca       string `json:"Marca"`
+	Marca string `json:"Marca"`
 
 	// Modelo es el modelo del vehiculo.
-	Modelo      uint   `json:"Modelo"`
+	Modelo uint `json:"Modelo"`
 
 	// Placas son las placas del vehiculo.
-	Placas      string `json:"Placas"`
+	Placas string `json:"Placas"`
 
 	// Color es el color del vehiculo.
-	Color       string `json:"Color"`
+	Color string `json:"Color"`
 
 	// VigenciaTec es la vigencia de la tarjeta de circulación del vehiculo.
 	VigenciaTec string `json:"VigenciaTec"`
 
 	// VigenciaSeg es la vigencia del seguro del vehiculo.
-	Seguro      bool   `json:"Seguro"`
+	Seguro bool `json:"Seguro"`
 
 	// Estado es el estado en el que se encuentra el vehiculo. Puede ser
 	// "activo", "inactivo" o "suspendido".
-	Estado      string `json:"Estado"`
+	Estado string `json:"Estado"`
 }

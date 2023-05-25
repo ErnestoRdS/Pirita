@@ -10,15 +10,15 @@ type Viaje struct {
 
 	// ConductorID es el ID del conductor al que pertenece el viaje. Es una llave
 	// foránea.
-	ConductorID uint    `json:"-"`
+	ConductorID uint `json:"-"`
 
 	// VehiculoID es el ID del vehículo al que pertenece el viaje. Es una llave
 	// foránea.
-	VehiculoID  uint    `json:"-"`
+	VehiculoID uint `json:"-"`
 
 	// Fecha es la fecha en la que se realizó el viaje.
-	Fecha       string  `json:"Fecha"`
+	Fecha string `json:"Fecha"`
 
 	// Origen es el origen del viaje.
-	Monto       float64 `json:"Monto"`
+	Monto float64 `json:"Monto"`
 }

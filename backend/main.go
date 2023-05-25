@@ -12,14 +12,14 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/limiter"
-    flogger "github.com/gofiber/fiber/v2/middleware/logger"
+	flogger "github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/monitor"
 
 	"github.com/UpVent/Pirita/v2/models"
 	"github.com/UpVent/Pirita/v2/routes"
 
-	"gorm.io/gorm"
 	"gorm.io/driver/sqlite"
+	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 )
 
@@ -40,7 +40,6 @@ func main() {
 		flag.PrintDefaults()
 	}
 	flag.Parse()
-
 
 	// Localización de la base de datos.
 	dsn := "./db/db.sqlite"
@@ -77,23 +76,6 @@ func main() {
 	app.Use(flogger.New())
 	app.Use(limiter.New())
 
-	// Usar un segundo logger para escribir en un archivo en el directorio
-	// temporal del sistema.
-	tmpDir := os.TempDir()
-
-	logfile, err := os.OpenFile(tmpDir + "/pirita.log", os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
-
-	if err != nil {
-		log.Fatalf("Error al crear el archivo de logs: %v", err)
-		log.Fatal("No se pudo crear el archivo de logs, el sistema continuará trabajando pero no se escribirán logs.")
-	}
-
-	defer logfile.Close()
-
-	app.Use(flogger.New(flogger.Config{
-		Output: logfile,
-	}))
-
 	// Montar las rutas.
 	routes.ConductorRouter(app, db)
 	routes.ContratoRouter(app, db)
@@ -105,7 +87,6 @@ func main() {
 	app.Get("/monitor", monitor.New(monitor.Config{
 		Title: "Pirita Backend - Monitoreo",
 	}))
-
 
 	// Mostrar siempre un 404 en la ruta raíz. Esto es solo una AP que
 	// recibe y responde JSON, no hay necesidad de mostrar una página
