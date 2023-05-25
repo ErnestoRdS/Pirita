@@ -11,6 +11,8 @@ import (
 	"runtime"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/monitor"
+
 
 	"github.com/UpVent/Pirita/v2/models"
 	"github.com/UpVent/Pirita/v2/routes"
@@ -60,8 +62,11 @@ func main() {
 	routes.VehiculoRouter(app, db)
 	routes.ViajeRouter(app, db)
 
-	// Rutas de observabilidad.
-	routes.ObservabilityRouter(app, db)
+	// Ruta de monitoreo.
+	app.Get("/monitor", monitor.New(monitor.Config{
+		Title: "Pirita Backend - Monitoreo",
+	}))
+
 
 	// Mostrar siempre un 404 en la ruta raíz.
 	app.Get("/", func(c *fiber.Ctx) error {
