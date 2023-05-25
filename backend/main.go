@@ -73,8 +73,26 @@ func main() {
 	app := fiber.New()
 
 	// Middelewares.
+	// Usar el middleware de logger y el de limitador de peticiones.
 	app.Use(flogger.New())
 	app.Use(limiter.New())
+
+	// Usar un segundo logger para escribir en un archivo en el directorio
+	// temporal del sistema.
+	tmpDir := os.TempDir()
+
+	logfile, err := os.OpenFile(tmpDir + "/pirita.log", os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
+
+	if err != nil {
+		log.Fatalf("Error al crear el archivo de logs: %v", err)
+		log.Fatal("No se pudo crear el archivo de logs, el sistema continuará trabajando pero no se escribirán logs.")
+	}
+
+	defer logfile.Close()
+
+	app.Use(flogger.New(flogger.Config{
+		Output: logfile,
+	}))
 
 	// Montar las rutas.
 	routes.ConductorRouter(app, db)
