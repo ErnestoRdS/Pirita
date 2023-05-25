@@ -5,14 +5,14 @@
 package main
 
 import (
+	"flag"
+	"fmt"
 	"log"
-	"net"
 	"os"
-	"runtime"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/limiter"
 	"github.com/gofiber/fiber/v2/middleware/monitor"
-
 
 	"github.com/UpVent/Pirita/v2/models"
 	"github.com/UpVent/Pirita/v2/routes"
@@ -24,8 +24,23 @@ import (
 
 // main es la función principal de pirita y es el punto de entrada del programa.
 // Desde aquí servimos las rutas protegidas, así como las rutas públicas de la
-// API. Todo desde un UNIX socket.
+// API.
 func main() {
+
+	// Banderas de linea de comandos.
+	var (
+		// Bandera para cambiar el puerto de escucha.
+		port string
+	)
+
+	flag.StringVar(&port, "port", "8080", "Cambia el puerto de escucha del programa.")
+	flag.Usage = func() {
+		fmt.Printf("Uso: %s [opciones]\n", os.Args[0])
+		flag.PrintDefaults()
+	}
+	flag.Parse()
+
+
 	// Localización de la base de datos.
 	dsn := "./db/db.sqlite"
 
@@ -55,6 +70,9 @@ func main() {
 
 	app := fiber.New()
 
+	// Middelewares.
+	app.Use(limiter.New())
+
 	// Montar las rutas.
 	routes.ConductorRouter(app, db)
 	routes.ContratoRouter(app, db)
@@ -73,57 +91,5 @@ func main() {
 		return c.SendStatus(fiber.StatusNotFound)
 	})
 
-	var listener net.Listener
-
-	switch runtime.GOOS {
-	case "linux":
-		listener, err = net.Listen("unix", "/tmp/pirita.sock")
-
-		if err != nil {
-			log.Fatalf("Error al crear el socket UNIX: %v", err)
-			os.Exit(1)
-		}
-
-		app.Listener(listener)
-
-		log.Printf("Iniciado en el socket UNIX: %v, sistema operativo: %v",
-			listener.Addr(),
-			runtime.GOOS)
-
-		defer listener.Close()
-
-	case "windows":
-		listener, err = net.Listen("tcp", "8080")
-
-		if err != nil {
-			log.Fatalf("Error al crear el socket TCP: %v", err)
-			os.Exit(1)
-		}
-
-		log.Printf("Iniciado en el socket TCP: %v, sistema operativo: %v",
-			listener.Addr(),
-			runtime.GOOS)
-
-		app.Listener(listener)
-
-		defer listener.Close()
-	case "darwin":
-		listener, err = net.Listen("unix", "/tmp/pirita.sock")
-
-		if err != nil {
-			log.Fatalf("Error al crear el socket UNIX: %v", err)
-			os.Exit(1)
-		}
-
-		app.Listener(listener)
-
-		log.Printf("Iniciado en el socket UNIX: %v, sistema operativo: %v",
-			listener.Addr(),
-			runtime.GOOS)
-
-		defer listener.Close()
-
-	default:
-		log.Fatalf("Sistema operativo no soportado: %v", runtime.GOOS)
-	}
+	app.Listen(port)
 }
