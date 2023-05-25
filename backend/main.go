@@ -17,6 +17,7 @@ import (
 
 	"github.com/UpVent/Pirita/v2/models"
 	"github.com/UpVent/Pirita/v2/routes"
+	"github.com/UpVent/Pirita/v2/middleware/auth"
 
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
@@ -71,16 +72,36 @@ func main() {
 	// Crear la aplicación de Fiber.
 	app := fiber.New()
 
+	// Manejar llaves de API.
+	var apiKeys []string
+	if _, err := os.Stat("keys.json"); os.IsNotExist(err) {
+		auth.GenerateAndSaveKeys(5) // Generar 5 llaves de API.
+		apiKeys = auth.LoadKeys()
+	} else {
+		apiKeys = auth.LoadKeys()
+	}
+
 	// Middelewares.
 	// Usar el middleware de logger y el de limitador de peticiones.
 	app.Use(flogger.New())
 	app.Use(limiter.New())
+	app.Use(auth.KeyAuth(apiKeys))
+
 
 	// Montar las rutas.
+	app.Use("/api/conductores", auth.KeyAuth(apiKeys))
 	routes.ConductorRouter(app, db)
+
+	app.Use("/api/contratos", auth.KeyAuth(apiKeys))
 	routes.ContratoRouter(app, db)
+
+	app.Use("/api/pagos", auth.KeyAuth(apiKeys))
 	routes.PagosRouter(app, db)
+
+	app.Use("/api/vehiculos", auth.KeyAuth(apiKeys))
 	routes.VehiculoRouter(app, db)
+
+	app.Use("/api/viajes", auth.KeyAuth(apiKeys))
 	routes.ViajeRouter(app, db)
 
 	// Ruta de monitoreo.
