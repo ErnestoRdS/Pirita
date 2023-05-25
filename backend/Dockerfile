@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY . .
 
-RUN make build_backend
+RUN make build
 
 EXPOSE 3000
 

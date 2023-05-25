@@ -21,4 +21,4 @@
 go.work
 
 # This project's db
-backend/db/sb.sqlite
+backend/db/
