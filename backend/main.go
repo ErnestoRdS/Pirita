@@ -12,13 +12,14 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/limiter"
+    flogger "github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/monitor"
 
 	"github.com/UpVent/Pirita/v2/models"
 	"github.com/UpVent/Pirita/v2/routes"
 
-	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
+	"gorm.io/driver/sqlite"
 	"gorm.io/gorm/logger"
 )
 
@@ -68,9 +69,11 @@ func main() {
 		log.Fatalf("Error al migrar los modelos a la base de datos: %v", err)
 	}
 
+	// Crear la aplicación de Fiber.
 	app := fiber.New()
 
 	// Middelewares.
+	app.Use(flogger.New())
 	app.Use(limiter.New())
 
 	// Montar las rutas.
@@ -86,10 +89,13 @@ func main() {
 	}))
 
 
-	// Mostrar siempre un 404 en la ruta raíz.
+	// Mostrar siempre un 404 en la ruta raíz. Esto es solo una AP que
+	// recibe y responde JSON, no hay necesidad de mostrar una página
+	// de inicio o algo por el estilo.
 	app.Get("/", func(c *fiber.Ctx) error {
 		return c.SendStatus(fiber.StatusNotFound)
 	})
 
-	app.Listen(port)
+	// Escuchar en el puerto especificado. (Por defecto 8080)
+	log.Fatal(app.Listen(port))
 }
