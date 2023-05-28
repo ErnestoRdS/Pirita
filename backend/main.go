@@ -7,18 +7,23 @@ package main
 import (
 	"flag"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
+
+	"github.com/joho/godotenv"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cache"
 	"github.com/gofiber/fiber/v2/middleware/limiter"
 	flogger "github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/monitor"
+	"github.com/google/uuid"
+
+	jwtware "github.com/gofiber/contrib/jwt"
 
 	"github.com/UpVent/Pirita/v2/models"
 	"github.com/UpVent/Pirita/v2/routes"
-	"github.com/UpVent/Pirita/v2/middleware/auth"
 
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
@@ -42,6 +47,25 @@ func main() {
 		flag.PrintDefaults()
 	}
 	flag.Parse()
+
+	// Verificar si el archivo de variables de entorno existe.
+	_, err := os.Stat(".env")
+
+	// Si el archivo no existe, crearlo y generar un uuid para la clave JWT.
+	if os.IsNotExist(err) {
+		secret := uuid.New().String()
+		err = ioutil.WriteFile(".env", []byte(fmt.Sprintf("JWT_SECRET=%s", secret)), 0644)
+
+		if err != nil {
+			log.Fatalf("Error al crear el archivo de variables de entorno: %v", err)
+		}
+	}
+
+	err = godotenv.Load()
+
+	if err != nil {
+		log.Fatalf("Error al cargar las variables de entorno: %v", err)
+	}
 
 	// Localización de la base de datos.
 	dsn := "./db/db.sqlite"
@@ -90,41 +114,36 @@ func main() {
 	// Crear la aplicación de Fiber.
 	app := fiber.New()
 
-	// Manejar llaves de API.
-	var apiKeys []string
-	if _, err := os.Stat("keys.json"); os.IsNotExist(err) {
-		auth.GenerateAndSaveKeys(5) // Generar 5 llaves de API.
-		apiKeys = auth.LoadKeys()
-	} else {
-		apiKeys = auth.LoadKeys()
-	}
-
 	// Middelewares.
 	// Usar el middleware de logger y el de limitador de peticiones.
 	app.Use(flogger.New())
 	app.Use(limiter.New())
-	app.Use(auth.KeyAuth(apiKeys))
 	app.Use(cache.New())
 
+	jwtMiddleware := jwtware.New(jwtware.Config{
+		SigningKey: jwtware.SigningKey{Key: []byte(os.Getenv("JWT_SECRET"))},
+	})
 
 	// Montar las rutas.
-	app.Use("/api/conductores", auth.KeyAuth(apiKeys))
+	app.Use("/api/conductores", jwtMiddleware)
 	routes.ConductorRouter(app, db)
 
-	app.Use("/api/contratos", auth.KeyAuth(apiKeys))
+	app.Use("/api/contratos", jwtMiddleware)
 	routes.ContratoRouter(app, db)
 
-	app.Use("/api/pagos", auth.KeyAuth(apiKeys))
+	app.Use("/api/pagos", jwtMiddleware)
 	routes.PagosRouter(app, db)
 
-	app.Use("/api/vehiculos", auth.KeyAuth(apiKeys))
+	app.Use("/api/vehiculos", jwtMiddleware)
 	routes.VehiculoRouter(app, db)
 
-	app.Use("/api/viajes", auth.KeyAuth(apiKeys))
+	app.Use("/api/viajes", jwtMiddleware)
 	routes.ViajeRouter(app, db)
 
+	routes.LoginRouter(app, db)
+
 	// Ruta de monitoreo.
-	app.Use("/monitor", auth.KeyAuth(apiKeys))
+	app.Use("/monitor", jwtMiddleware)
 	app.Get("/monitor", monitor.New(monitor.Config{
 		Title: "Pirita Backend - Monitoreo",
 	}))
