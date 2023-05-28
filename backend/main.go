@@ -70,6 +70,23 @@ func main() {
 		log.Fatalf("Error al migrar los modelos a la base de datos: %v", err)
 	}
 
+	// Sentencias para llenar la base de datos con datos de prueba
+	states := `
+		INSERT INTO conductors(nombre, apellidos, curp, clave_ine, salario, estado) VALUES('Yo', ':3xd', ':3xY666666HCSFUK02', 'claveineYoxd', 150.0, 'Pasivo');
+		INSERT INTO vehiculos(fabricante, marca, modelo, placas, color, vigencia_tec, seguro, estado) VALUES('Bentley', 'Continental GT', 2015, 'FUK-04-EVA', 'manzana', 'Simónxd', 'Tambiénxd', 'Sin defensa trasera');                
+		INSERT INTO contratos(conductor_id, vehiculo_id, fecha_inicio, fecha_fin, comisiones) VALUES(1, 1, '28-05-2023', '28-06-2023', 10);
+		INSERT INTO viajes(conductor_id, vehiculo_id, fecha, monto) VALUES(1, 1, '28-05-2023', 50.0);
+		INSERT INTO pagos(conductor_id, fecha, cantidad, notas) VALUES(1, '28-05-2023', 15.0, 'Sin comentarios');
+	`
+
+	// Ejecutar sentencias
+	db.Exec(states)
+
+	if err != nil {
+		log.Fatalf("Error: %s \n Al tratar de ejecutar comando(s) %s \n", err, states)
+	}
+	log.Println("Todo correcto con la BD")
+
 	// Crear la aplicación de Fiber.
 	app := fiber.New()
 
