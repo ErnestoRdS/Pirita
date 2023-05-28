@@ -1,0 +1,46 @@
+.TH Pirita Backend 1 "May 2023" "Version 0.1.0" "Pirita Backend Manual"
+
+.SH NAME
+backend \- Pirita Backend. El backend de Pirita es un servidor que se encarga de recibir las peticiones de los clientes y de enviarles las respuestas correspondientes, maneja conductores, pagos, viajes, vehículos y es el encargado de comunicarse con la base de datos para entregarle la información que necesita al cliente.
+
+.SH SYNOPSIS
+.B backend
+[\fIOPCIONES\fR]
+
+.SH DESCRIPCIÓN
+El backend de Pirita es un servidor hecho en Go y Fiber, que actúa como el centro de comunicación entre los clientes y la base de datos, todo a través de una REST API donde se puede consultar, escribir o modificar la información de los conductores, pagos, viajes y vehículos.
+
+.SH OPCIONES
+.TP
+\fB\-h\fR, \fB\-\-help\fR
+Muestra la ayuda del programa.
+
+.TP
+\fB\-p\fR, \fB\-\-port\fR
+Puerto en el que se va a ejecutar el servidor.
+
+.SH EJEMPLOS
+.PP
+\fBbackend \-p 8080\fR
+.PP
+Ejecuta el servidor en el puerto 8080.
+
+.SH AUTOR
+Pirita Backend fue desarrollado por: UpVent Technologies - 2023.
+
+.SH COPYRIGHT
+
+Copyright © 2023 UpVent Technologies
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program. If not, see http://www.gnu.org/licenses/.
