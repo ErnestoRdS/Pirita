@@ -27,6 +27,19 @@ La REST API tiene los siguientes endpoints:
 - /api/vehiculos (GET, POST, PUT, DELETE) [Ruta para obtener, crear, modificar o eliminar vehículos]
 .TP
 - /monitor (GET) [Ruta para monitorear el estado del servidor. Retorna un JSON con el estado del servidor o puede verse en el navegador]
+.TP
+El backend de Pirita se basa en una arquitectura sólida y escalable, lo que garantiza un rendimiento óptimo incluso en entornos de alto tráfico. Utiliza técnicas de almacenamiento en caché, optimización de consultas y manejo eficiente de recursos para garantizar una respuesta rápida y confiable a las solicitudes de los clientes.
+
+.SS MIDDLEWARES DE LA REST API
+La REST API tiene los siguientes middlewares:
+.TP
+- Logger Fiber: Middleware para registrar las solicitudes HTTP y las respuestas HTTP.
+.TP
+- Limiter Fiber: Middleware para limitar las solicitudes HTTP, evitando ataques de denegación de servicio (DoS).
+.TP
+- KeyAuth: Middleware para autenticar las solicitudes HTTP, evitando que usuarios no autorizados accedan a la REST API si no tienen una llave válida.
+.TP
+- Monitor Fiber: Middleware para monitorear el estado del servidor, puede obtenerse un json con el estado del servidor o puede verse en el navegador en la ruta /monitor.
 
 .SH OPCIONES
 .TP
