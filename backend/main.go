@@ -105,6 +105,7 @@ func main() {
 	routes.ViajeRouter(app, db)
 
 	// Ruta de monitoreo.
+	app.Use("/monitor", auth.KeyAuth(apiKeys))
 	app.Get("/monitor", monitor.New(monitor.Config{
 		Title: "Pirita Backend - Monitoreo",
 	}))

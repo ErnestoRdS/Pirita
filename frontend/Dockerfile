@@ -1,17 +1,28 @@
-# Use the official nginx image as base image.
+# Etapa de construcción
+FROM node:latest as build
+
+# Copia los archivos fuente del proyecto al directorio de trabajo en la imagen de construcción.
+WORKDIR /app
+COPY . .
+
+# Instala las dependencias y construye la aplicación.
+RUN npm install
+RUN npm run build
+
+# Etapa de producción
 FROM nginx
 
-# Copy the nginx configuration file.
+# Copia el archivo de configuración de nginx.
 COPY nginx.conf /etc/nginx/nginx.conf
 
-# Copy our static files into the nginx public folder.
+# Define el directorio de trabajo en la imagen de producción.
 WORKDIR /usr/share/nginx/html
 
-# Copy the static files from the build stage.
-COPY --from=0 /app/build .
+# Copia los archivos estáticos desde la etapa de construcción a la imagen de producción.
+COPY --from=build /app/build .
 
-# Expose port 80 to the Docker host, so we can access it
+# Expone el puerto 80 al host de Docker, para que podamos acceder a la aplicación.
 EXPOSE 80
 
-# Run nginx in the foreground.
+# Ejecuta nginx en primer plano.
 CMD ["nginx", "-g", "daemon off;"]
