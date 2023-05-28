@@ -10,6 +10,24 @@ backend \- Pirita Backend. El backend de Pirita es un servidor que se encarga de
 .SH DESCRIPCIÓN
 El backend de Pirita es un servidor hecho en Go y Fiber, que actúa como el centro de comunicación entre los clientes y la base de datos, todo a través de una REST API donde se puede consultar, escribir o modificar la información de los conductores, pagos, viajes y vehículos.
 
+.SS CONSIDERACIONES
+En la primer ejecución del servidor, se creará una base de datos SQLite en el directorio donde se ejecuta el servidor, con el nombre de db.sqlite, en caso de que ya exista una base de datos con ese nombre, se usará esa base de datos. Además, se creará un archivo keys.json en el mismo directorio, dicho archivo contiene cinco (5) llaves para la API del servidor, usted deberá guardar estas llaves, pues serán usadas por el cliente para solicitar información al servidor.
+
+.SS ENDPOINTS DE LA REST API
+La REST API tiene los siguientes endpoints:
+.TP
+- /api/conductores (GET, POST, PUT, DELETE) [Ruta para obtener, crear, modificar o eliminar conductores]
+.TP
+- /api/contratos (GET, POST, PUT, DELETE) [Ruta para obtener, crear, modificar o eliminar contratos]
+.TP
+- /api/pagos (GET, POST, PUT, DELETE) [Ruta para obtener, crear, modificar o eliminar pagos]
+.TP
+- /api/viajes (GET, POST, PUT, DELETE) [Ruta para obtener, crear, modificar o eliminar viajes]
+.TP
+- /api/vehiculos (GET, POST, PUT, DELETE) [Ruta para obtener, crear, modificar o eliminar vehículos]
+.TP
+- /monitor (GET) [Ruta para monitorear el estado del servidor. Retorna un JSON con el estado del servidor o puede verse en el navegador]
+
 .SH OPCIONES
 .TP
 \fB\-h\fR, \fB\-\-help\fR
