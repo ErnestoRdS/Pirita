@@ -31,4 +31,16 @@ type Conductor struct {
 
 	// Pagos es la lista de pagos que ha recibido el conductor.
 	Pagos []Pago `json:"pagos,omitempty" gorm:"foreignKey:ConductorID"`
+
+
+	// Para el inicio de sesión.
+
+	// Usuario es el nombre de usuario del conductor.
+	Usuario string `json:"usuario"`
+
+	// Correo es el correo electrónico del conductor.
+	Correo string `json:"correo"`
+
+	// Password es la contraseña del conductor.
+	Password string `json:"password"`
 }
