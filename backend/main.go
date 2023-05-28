@@ -11,6 +11,7 @@ import (
 	"os"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cache"
 	"github.com/gofiber/fiber/v2/middleware/limiter"
 	flogger "github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/monitor"
@@ -86,6 +87,7 @@ func main() {
 	app.Use(flogger.New())
 	app.Use(limiter.New())
 	app.Use(auth.KeyAuth(apiKeys))
+	app.Use(cache.New())
 
 
 	// Montar las rutas.
