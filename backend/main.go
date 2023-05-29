@@ -99,7 +99,6 @@ func main() {
 		log.Fatalf("Error al migrar los modelos a la base de datos: %v", err)
 	}
 
-
 	randomPassword := "test1234"
 
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(randomPassword), bcrypt.DefaultCost)
@@ -111,15 +110,15 @@ func main() {
 	log.Printf("Guarde bien esta contraseña, es la única vez que la verá: %s", randomPassword)
 
 	admin := models.Administrador{
-		Nombre:   "Administrador",
+		Nombre:    "Administrador",
 		Apellidos: "Pirita",
-		Usuario:  "admin",
-		Correo:   "admin@pirita.com",
-		Password: string(hashedPassword),
+		Usuario:   "admin",
+		Correo:    "admin@pirita.com",
+		Password:  string(hashedPassword),
 	}
 
+	// Crear el administrador por defecto.
 	db.Create(&admin)
-
 
 	// Sentencias para llenar la base de datos con datos de prueba
 	// Un registro de prueba para cada tabla
@@ -143,6 +142,7 @@ func main() {
 	app.Use(limiter.New())
 	app.Use(cache.New())
 
+	// Usar el middleware contrib de JWT.
 	jwtMiddleware := jwtware.New(jwtware.Config{
 		SigningKey: jwtware.SigningKey{Key: []byte(os.Getenv("JWT_SECRET"))},
 	})

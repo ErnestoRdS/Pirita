@@ -5,6 +5,9 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
+// AdminMiddleware es un middleware que comprueba si el usuario es un administrador,
+// recibe un token de autenticación y comprueba si el tipo de usuario es admin usando
+// los claims del token de autenticación.
 func AdminMiddleware(c *fiber.Ctx) error {
 	user := c.Locals("user").(*jwt.Token)
 	claims := user.Claims.(jwt.MapClaims)

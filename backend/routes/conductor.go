@@ -2,9 +2,8 @@
 package routes
 
 import (
-	"github.com/UpVent/Pirita/v2/models"
 	"github.com/UpVent/Pirita/v2/middleware"
-
+	"github.com/UpVent/Pirita/v2/models"
 
 	"github.com/gofiber/fiber/v2"
 
