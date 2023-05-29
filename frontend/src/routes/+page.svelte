@@ -95,20 +95,19 @@
 		<div class="container py-4">
 			<form>
 				<input
-					class="form-control form-control-lg my-1 border-0 shadow-sm"
+					class="form-control form-control-lg my-1"
 					bind:value={usuario}
 					type="text"
 					placeholder="Usuario"
 				/>
 				<input
-					class="form-control form-control-lg my-2 border-0 shadow-sm"
+					class="form-control form-control-lg my-2"
 					bind:value={password}
 					type="password"
 					placeholder="Contraseña"
 				/>
-				<button class="btn btn-primary mb-3" on:click={login}>Iniciar sesión</button>
+				<button class="btn btn-dark btn-lg mb-3" on:click={login}>Iniciar sesión</button>
 			</form>
-			<h2 class="text-light fw-bold">Iniciar Sesión</h2>
 		</div>
 		<div class="container">
 			<hr />
