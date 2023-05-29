@@ -22,4 +22,4 @@ go.work
 
 # This project's db
 backend/db/
-backend/keys.json
+backend/.env

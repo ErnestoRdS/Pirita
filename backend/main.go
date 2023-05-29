@@ -13,11 +13,14 @@ import (
 
 	"github.com/joho/godotenv"
 
+	"golang.org/x/crypto/bcrypt"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cache"
 	"github.com/gofiber/fiber/v2/middleware/limiter"
 	flogger "github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/monitor"
+
 	"github.com/google/uuid"
 
 	jwtware "github.com/gofiber/contrib/jwt"
@@ -83,6 +86,7 @@ func main() {
 
 	// Migrar la base de datos.
 	err = db.AutoMigrate(
+		&models.Administrador{},
 		&models.Conductor{},
 		&models.Contrato{},
 		&models.Pago{},
@@ -93,6 +97,28 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error al migrar los modelos a la base de datos: %v", err)
 	}
+
+
+	randomPassword := "test1234"
+
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(randomPassword), bcrypt.DefaultCost)
+
+	if err != nil {
+		log.Fatalf("Error al generar la contraseña aleatoria: %v", err)
+	}
+
+	log.Printf("Guarde bien esta contraseña, es la única vez que la verá: %s", randomPassword)
+
+	admin := models.Administrador{
+		Nombre:   "Administrador",
+		Apellidos: "Pirita",
+		Usuario:  "admin",
+		Correo:   "admin@pirita.com",
+		Password: string(hashedPassword),
+	}
+
+	db.Create(&admin)
+
 
 	// Sentencias para llenar la base de datos con datos de prueba
 	states := `

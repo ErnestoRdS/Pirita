@@ -7,6 +7,8 @@ import (
 	"github.com/UpVent/Pirita/v2/models"
 	"github.com/gofiber/fiber/v2"
 
+	"golang.org/x/crypto/bcrypt"
+
 	"github.com/golang-jwt/jwt/v5"
 
 	"gorm.io/gorm"
@@ -14,16 +16,27 @@ import (
 
 // LoginRouter es router para la autenticación de usuarios en Pirita.
 func LoginRouter(app *fiber.App, db *gorm.DB) {
-	app.Get("/login", func(c *fiber.Ctx) error {
-		user := c.FormValue("user", "")
-		pass := c.FormValue("pass", "")
+	app.Post("/login", func(c *fiber.Ctx) error {
+
+		type LoginInput struct {
+			Usuario  string `json:"usuario"`
+			Password string `json:"password"`
+		}
+
+		input := new(LoginInput)
+
+		if err := c.BodyParser(input); err != nil {
+			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+				"message": "Error al decodificar el cuerpo de la petición",
+			})
+		}
 
 		var admin models.Administrador
 		var conductor models.Conductor
 
 		// Buscar al usuario en la base de datos.
-		if err := db.Where("usuario = ?", user).First(&admin).Error; err != nil {
-			if err := db.Where("usuario = ?", user).First(&conductor).Error; err != nil {
+		if err := db.Where("usuario = ?", input.Usuario).First(&admin).Error; err != nil {
+			if err := db.Where("usuario = ?", input.Usuario).First(&conductor).Error; err != nil {
 				return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
 					"message": "Usuario no encontrado.",
 				})
@@ -31,8 +44,8 @@ func LoginRouter(app *fiber.App, db *gorm.DB) {
 		}
 
 		// Comprobar la contraseña.
-		if admin.Password != pass {
-			if conductor.Password != pass {
+		if err := bcrypt.CompareHashAndPassword([]byte(admin.Password), []byte(input.Password)); err != nil {
+			if err := bcrypt.CompareHashAndPassword([]byte(conductor.Password), []byte(input.Password)); err != nil {
 				return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 					"message": "Contraseña incorrecta.",
 				})
@@ -57,9 +70,10 @@ func LoginRouter(app *fiber.App, db *gorm.DB) {
 			claims["exp"] = time.Now().Add(time.Hour * 72).Unix()
 		}
 
+		secret := []byte(os.Getenv("JWT_SECRET"))
 
 		// Firmar el token.
-		tokenString, err := token.SignedString(os.Getenv("JWT_SECRET"))
+		tokenString, err := token.SignedString(secret)
 
 		if err != nil {
 			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
