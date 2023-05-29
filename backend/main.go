@@ -121,6 +121,7 @@ func main() {
 
 
 	// Sentencias para llenar la base de datos con datos de prueba
+	// Un registro de prueba para cada tabla
 	states := `
 		INSERT INTO conductors(nombre, apellidos, curp, clave_ine, salario, estado) VALUES('Yo', ':3xd', ':3xY666666HCSFUK02', 'claveineYoxd', 150.0, 'Pasivo');
 		INSERT INTO vehiculos(fabricante, marca, modelo, placas, color, vigencia_tec, seguro, estado) VALUES('Bentley', 'Continental GT', 2015, 'FUK-04-EVA', 'manzana', 'Simónxd', 'Tambiénxd', 'Sin defensa trasera');                
@@ -129,13 +130,8 @@ func main() {
 		INSERT INTO pagos(conductor_id, fecha, cantidad, notas) VALUES(1, '28-05-2023', 15.0, 'Sin comentarios');
 	`
 
-	// Ejecutar sentencias
+	// Ejecutar sentencias con cadenas de SQL en crudo
 	db.Exec(states)
-
-	if err != nil {
-		log.Fatalf("Error: %s \n Al tratar de ejecutar comando(s) %s \n", err, states)
-	}
-	log.Println("Todo correcto con la BD")
 
 	// Crear la aplicación de Fiber.
 	app := fiber.New()

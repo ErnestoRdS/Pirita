@@ -6,6 +6,8 @@ import "gorm.io/gorm"
 // Los administradores son los encargados de gestionar los conductores, así como
 // de gestionar los pagos que se les hacen a los conductores
 type Administrador struct {
+	// Incorporamos gorm.Model para que gorm sepa que debe usar el campo ID como
+	// llave primaria, además de proveer los campos created_at y updated_at.
 	gorm.Model
 
 	// Nombre es el nombre del Administrador.
