@@ -13,6 +13,16 @@ El backend de Pirita es un servidor hecho en Go y Fiber, que actúa como el cent
 .SS CONSIDERACIONES
 En la primer ejecución del servidor, se creará una base de datos SQLite en el directorio donde se ejecuta el servidor, con el nombre de db.sqlite, en caso de que ya exista una base de datos con ese nombre, se usará esa base de datos. Además, se creará un archivo keys.json en el mismo directorio, dicho archivo contiene cinco (5) llaves para la API del servidor, usted deberá guardar estas llaves, pues serán usadas por el cliente para solicitar información al servidor.
 
+.SS CONSIDERACIONES AL COMPILAR
+Por defecto, al compilar el main.go, se ejecutarán sentencias de inserción a la base de datos para agregar registros de prueba y facilitar el testeo. Con el comando \fB\go build\fR acompañado por la bandera -ldflags, se puede cambiar el valor de la variable que contiene dichas consultas y dejarla en blanco para obtener una base de datos limpia y lista para el modo de producción. El Makefile del backend cuenta con dos (2) targets para compilarlo, ya sea para una versión de 'Prueba' o para una versión final, simplemente hace falta ir a la terminal y ejecutar Make seguido por alguno de los siguientes comandos:
+.TP
+\fBbuild\-test\fR
+Para una compilación normal con los datos de prueba.
+
+.TP
+\fBbuild\-prod\fR
+Para tener un binario productivo y distribuible.
+
 .SS ENDPOINTS DE LA REST API
 La REST API tiene los siguientes endpoints:
 .TP
