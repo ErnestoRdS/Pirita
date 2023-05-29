@@ -25,6 +25,7 @@ import (
 
 	jwtware "github.com/gofiber/contrib/jwt"
 
+	"github.com/UpVent/Pirita/v2/middleware"
 	"github.com/UpVent/Pirita/v2/models"
 	"github.com/UpVent/Pirita/v2/routes"
 
@@ -149,22 +150,18 @@ func main() {
 	// Montar las rutas.
 	routes.ConductorRouter(app, db, jwtMiddleware)
 
-	app.Use("/api/contratos", jwtMiddleware)
-	routes.ContratoRouter(app, db)
+	routes.ContratoRouter(app, db, jwtMiddleware)
 
-	app.Use("/api/pagos", jwtMiddleware)
-	routes.PagosRouter(app, db)
+	routes.PagosRouter(app, db, jwtMiddleware)
 
-	app.Use("/api/vehiculos", jwtMiddleware)
-	routes.VehiculoRouter(app, db)
+	routes.VehiculoRouter(app, db, jwtMiddleware)
 
-	app.Use("/api/viajes", jwtMiddleware)
-	routes.ViajeRouter(app, db)
+	routes.ViajeRouter(app, db, jwtMiddleware)
 
 	routes.LoginRouter(app, db)
 
 	// Ruta de monitoreo.
-	app.Use("/monitor", jwtMiddleware)
+	app.Use("/monitor", jwtMiddleware, middleware.AdminMiddleware)
 	app.Get("/monitor", monitor.New(monitor.Config{
 		Title: "Pirita Backend - Monitoreo",
 	}))

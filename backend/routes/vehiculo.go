@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"github.com/UpVent/Pirita/v2/middleware"
 	"github.com/UpVent/Pirita/v2/models"
 	"github.com/gofiber/fiber/v2"
 
@@ -18,9 +19,9 @@ import (
 // - Eliminar un vehiculo por ID (DELETE `/api/vehiculos/:id`)
 //
 // Para más información sobre los contratos, ver el modelo `Vehiculo`.
-func VehiculoRouter(app *fiber.App, db *gorm.DB) {
+func VehiculoRouter(app *fiber.App, db *gorm.DB, jwtMiddleware fiber.Handler) {
 	// Obtener todos los vehiculos
-	app.Get("/api/vehiculos", func(c *fiber.Ctx) error {
+	app.Get("/api/vehiculos", jwtMiddleware, middleware.AdminMiddleware, func(c *fiber.Ctx) error {
 		var vehiculos []models.Vehiculo
 		if err := db.Find(&vehiculos).Error; err != nil {
 			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
@@ -31,7 +32,7 @@ func VehiculoRouter(app *fiber.App, db *gorm.DB) {
 	})
 
 	// Obtener un vehiculo por ID
-	app.Get("/api/vehiculos/:id", func(c *fiber.Ctx) error {
+	app.Get("/api/vehiculos/:id", jwtMiddleware, func(c *fiber.Ctx) error {
 		id := c.Params("id")
 		var vehiculo models.Vehiculo
 		if err := db.First(&vehiculo, id).Error; err != nil {
@@ -43,7 +44,7 @@ func VehiculoRouter(app *fiber.App, db *gorm.DB) {
 	})
 
 	// Crear un nuevo vehiculo
-	app.Post("/api/vehiculos", func(c *fiber.Ctx) error {
+	app.Post("/api/vehiculos", jwtMiddleware, middleware.AdminMiddleware, func(c *fiber.Ctx) error {
 		var vehiculo models.Vehiculo
 		if err := c.BodyParser(&vehiculo); err != nil {
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
@@ -59,7 +60,7 @@ func VehiculoRouter(app *fiber.App, db *gorm.DB) {
 	})
 
 	// Actualizar un vehiculo por ID
-	app.Put("/api/vehiculos/:id", func(c *fiber.Ctx) error {
+	app.Put("/api/vehiculos/:id", jwtMiddleware, middleware.AdminMiddleware, func(c *fiber.Ctx) error {
 		id := c.Params("id")
 		var vehiculo models.Vehiculo
 		if err := db.First(&vehiculo, id).Error; err != nil {
@@ -81,7 +82,7 @@ func VehiculoRouter(app *fiber.App, db *gorm.DB) {
 	})
 
 	// Eliminar un vehiculo por ID
-	app.Delete("/api/vehiculos/:id", func(c *fiber.Ctx) error {
+	app.Delete("/api/vehiculos/:id", jwtMiddleware, middleware.AdminMiddleware, func(c *fiber.Ctx) error {
 		id := c.Params("id")
 		var vehiculo models.Vehiculo
 		if err := db.First(&vehiculo, id).Error; err != nil {

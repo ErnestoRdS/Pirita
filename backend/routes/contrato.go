@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"github.com/UpVent/Pirita/v2/middleware"
 	"github.com/UpVent/Pirita/v2/models"
 	"github.com/gofiber/fiber/v2"
 
@@ -18,9 +19,9 @@ import (
 // - Eliminar un contrato por ID (DELETE `/api/contratos/:id`)
 //
 // Para más información sobre los contratos, ver el modelo `Contrato`.
-func ContratoRouter(app *fiber.App, db *gorm.DB) {
+func ContratoRouter(app *fiber.App, db *gorm.DB, jwtMiddleware fiber.Handler) {
 	// Obtener todos los contratos
-	app.Get("/api/contratos", func(c *fiber.Ctx) error {
+	app.Get("/api/contratos", jwtMiddleware, middleware.AdminMiddleware, func(c *fiber.Ctx) error {
 		var contratos []models.Contrato
 		if err := db.Find(&contratos).Error; err != nil {
 			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
@@ -31,7 +32,7 @@ func ContratoRouter(app *fiber.App, db *gorm.DB) {
 	})
 
 	// Obtener un contrato por ID
-	app.Get("/api/contratos/:id", func(c *fiber.Ctx) error {
+	app.Get("/api/contratos/:id", jwtMiddleware, func(c *fiber.Ctx) error {
 		id := c.Params("id")
 		var contrato models.Contrato
 		if err := db.First(&contrato, id).Error; err != nil {
@@ -43,7 +44,7 @@ func ContratoRouter(app *fiber.App, db *gorm.DB) {
 	})
 
 	// Crear un nuevo contrato
-	app.Post("/api/contratos", func(c *fiber.Ctx) error {
+	app.Post("/api/contratos", jwtMiddleware, middleware.AdminMiddleware, func(c *fiber.Ctx) error {
 		var contrato models.Contrato
 		if err := c.BodyParser(&contrato); err != nil {
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
@@ -59,7 +60,7 @@ func ContratoRouter(app *fiber.App, db *gorm.DB) {
 	})
 
 	// Actualizar un contrato por ID
-	app.Put("/api/contratos/:id", func(c *fiber.Ctx) error {
+	app.Put("/api/contratos/:id", jwtMiddleware, middleware.AdminMiddleware, func(c *fiber.Ctx) error {
 		id := c.Params("id")
 		var contrato models.Contrato
 		if err := db.First(&contrato, id).Error; err != nil {
@@ -81,7 +82,7 @@ func ContratoRouter(app *fiber.App, db *gorm.DB) {
 	})
 
 	// Eliminar un contrato por ID
-	app.Delete("/api/contratos/:id", func(c *fiber.Ctx) error {
+	app.Delete("/api/contratos/:id", jwtMiddleware, middleware.AdminMiddleware, func(c *fiber.Ctx) error {
 		id := c.Params("id")
 		var contrato models.Contrato
 		if err := db.First(&contrato, id).Error; err != nil {

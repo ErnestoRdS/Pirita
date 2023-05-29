@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"github.com/UpVent/Pirita/v2/middleware"
 	"github.com/UpVent/Pirita/v2/models"
 	"github.com/gofiber/fiber/v2"
 
@@ -18,9 +19,9 @@ import (
 // - Eliminar un pago por ID (DELETE `/api/pagos/:id`)
 //
 // Para más información sobre los contratos, ver el modelo `Pago`.
-func PagosRouter(app *fiber.App, db *gorm.DB) {
+func PagosRouter(app *fiber.App, db *gorm.DB, jwtMiddleware fiber.Handler) {
 	// Obtener todos los pagos.
-	app.Get("/api/pagos", func(c *fiber.Ctx) error {
+	app.Get("/api/pagos", jwtMiddleware, middleware.AdminMiddleware, func(c *fiber.Ctx) error {
 		var pagos []models.Pago
 		if err := db.Find(&pagos).Error; err != nil {
 			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
@@ -31,7 +32,7 @@ func PagosRouter(app *fiber.App, db *gorm.DB) {
 	})
 
 	// Obtener un pago por ID.
-	app.Get("/api/pagos/:id", func(c *fiber.Ctx) error {
+	app.Get("/api/pagos/:id", jwtMiddleware, func(c *fiber.Ctx) error {
 		var pago models.Pago
 		if err := db.Find(&pago, c.Params("id")).Error; err != nil {
 			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
@@ -42,7 +43,7 @@ func PagosRouter(app *fiber.App, db *gorm.DB) {
 	})
 
 	// Crear un nuevo pago.
-	app.Post("/api/pagos", func(c *fiber.Ctx) error {
+	app.Post("/api/pagos", jwtMiddleware, middleware.AdminMiddleware, func(c *fiber.Ctx) error {
 		var pago models.Pago
 
 		if err := c.BodyParser(&pago); err != nil {
@@ -59,7 +60,7 @@ func PagosRouter(app *fiber.App, db *gorm.DB) {
 	})
 
 	// Actualizar un pago por ID.
-	app.Put("/api/pagos/:id", func(c *fiber.Ctx) error {
+	app.Put("/api/pagos/:id", jwtMiddleware, middleware.AdminMiddleware, func(c *fiber.Ctx) error {
 		var pago models.Pago
 		if err := db.First(&pago, c.Params("id")).Error; err != nil {
 			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
@@ -80,7 +81,7 @@ func PagosRouter(app *fiber.App, db *gorm.DB) {
 	})
 
 	// Eliminar un pago por ID
-	app.Delete("/pagos/:id", func(c *fiber.Ctx) error {
+	app.Delete("/pagos/:id", jwtMiddleware, middleware.AdminMiddleware, func(c *fiber.Ctx) error {
 		var pago models.Pago
 		if err := db.First(&pago, c.Params("id")).Error; err != nil {
 			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
