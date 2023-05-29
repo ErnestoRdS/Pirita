@@ -2,11 +2,16 @@
 DOCKER_IMAGE_NAME=pirita_backend
 DOCKER_CONTAINER_NAME=pirita_backend
 
-build:
+build-test:
 	go mod download
 	go get -d -v
 	go build -o backend
 	chmod +x backend
+
+build-prod:
+	go mod download
+	go get -d -v
+	go build -ldflags="-X 'main.states=""'" -o backend
 
 debug:
 	go run main.go
