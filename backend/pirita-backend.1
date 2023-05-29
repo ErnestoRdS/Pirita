@@ -38,6 +38,9 @@ La REST API tiene los siguientes endpoints:
 .TP
 - /monitor (GET) [Ruta para monitorear el estado del servidor. Retorna un JSON con el estado del servidor o puede verse en el navegador]
 .TP
+- /login (POST) [Ruta para autenticar a los usuarios. Retorna un JSON con el token de autenticación JWT]
+
+.TP
 El backend de Pirita se basa en una arquitectura sólida y escalable, lo que garantiza un rendimiento óptimo incluso en entornos de alto tráfico. Utiliza técnicas de almacenamiento en caché, optimización de consultas y manejo eficiente de recursos para garantizar una respuesta rápida y confiable a las solicitudes de los clientes.
 
 .SS MIDDLEWARES DE LA REST API
@@ -47,7 +50,9 @@ La REST API tiene los siguientes middlewares:
 .TP
 - Limiter Fiber: Middleware para limitar las solicitudes HTTP, evitando ataques de denegación de servicio (DoS).
 .TP
-- KeyAuth: Middleware para autenticar las solicitudes HTTP, evitando que usuarios no autorizados accedan a la REST API si no tienen una llave válida.
+- JWTware Fiber: Middleware para verificar el token de autenticación JWT.
+.TP
+- IsAdminJWT: Middleware para verificar si el usuario es administrador leyendo los atributos del token de autenticación JWT.
 .TP
 - Monitor Fiber: Middleware para monitorear el estado del servidor, puede obtenerse un json con el estado del servidor o puede verse en el navegador en la ruta /monitor.
 
