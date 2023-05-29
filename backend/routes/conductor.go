@@ -3,6 +3,9 @@ package routes
 
 import (
 	"github.com/UpVent/Pirita/v2/models"
+	"github.com/UpVent/Pirita/v2/middleware"
+
+
 	"github.com/gofiber/fiber/v2"
 
 	"gorm.io/gorm"
@@ -19,9 +22,9 @@ import (
 // - Eliminar un conductor por ID (DELETE `/api/conductores/:id`)
 //
 // Para más información sobre los conductores, ver el modelo `Conductor`.
-func ConductorRouter(app *fiber.App, db *gorm.DB) {
+func ConductorRouter(app *fiber.App, db *gorm.DB, jwtMiddleware fiber.Handler) {
 	// Obtener todos los conductores
-	app.Get("/api/conductores", func(c *fiber.Ctx) error {
+	app.Get("/api/conductores", jwtMiddleware, middleware.AdminMiddleware, func(c *fiber.Ctx) error {
 		var conductors []models.Conductor
 		if err := db.Find(&conductors).Error; err != nil {
 			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
@@ -32,7 +35,7 @@ func ConductorRouter(app *fiber.App, db *gorm.DB) {
 	})
 
 	// Obtener un conductor por ID
-	app.Get("/api/conductores/:id", func(c *fiber.Ctx) error {
+	app.Get("/api/conductores/:id", jwtMiddleware, func(c *fiber.Ctx) error {
 		id := c.Params("id")
 		var conductor models.Conductor
 		if err := db.First(&conductor, id).Error; err != nil {
@@ -44,7 +47,7 @@ func ConductorRouter(app *fiber.App, db *gorm.DB) {
 	})
 
 	// Crear un nuevo conductor
-	app.Post("/api/conductores", func(c *fiber.Ctx) error {
+	app.Post("/api/conductores", jwtMiddleware, middleware.AdminMiddleware, func(c *fiber.Ctx) error {
 		var conductor models.Conductor
 		if err := c.BodyParser(&conductor); err != nil {
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
@@ -60,7 +63,7 @@ func ConductorRouter(app *fiber.App, db *gorm.DB) {
 	})
 
 	// Actualizar un conductor por ID
-	app.Put("/api/conductores/:id", func(c *fiber.Ctx) error {
+	app.Put("/api/conductores/:id", jwtMiddleware, middleware.AdminMiddleware, func(c *fiber.Ctx) error {
 		id := c.Params("id")
 		var conductor models.Conductor
 		if err := db.First(&conductor, id).Error; err != nil {
@@ -82,7 +85,7 @@ func ConductorRouter(app *fiber.App, db *gorm.DB) {
 	})
 
 	// Eliminar un conductor por ID
-	app.Delete("/api/conductores/:id", func(c *fiber.Ctx) error {
+	app.Delete("/api/conductores/:id", jwtMiddleware, middleware.AdminMiddleware, func(c *fiber.Ctx) error {
 		id := c.Params("id")
 		var conductor models.Conductor
 		if err := db.First(&conductor, id).Error; err != nil {

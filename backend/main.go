@@ -147,8 +147,7 @@ func main() {
 	})
 
 	// Montar las rutas.
-	app.Use("/api/conductores", jwtMiddleware)
-	routes.ConductorRouter(app, db)
+	routes.ConductorRouter(app, db, jwtMiddleware)
 
 	app.Use("/api/contratos", jwtMiddleware)
 	routes.ContratoRouter(app, db)
