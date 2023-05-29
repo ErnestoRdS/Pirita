@@ -23,7 +23,13 @@ type Conductor struct {
 	ClaveINE string `json:"clave_ine"`
 
 	// RFC es el RFC con homoclave del conductor.
+	RFC string `json:"rfc"`
+
+	// Salario es el salario del conductor.
 	Salario float64 `json:"salario"`
+
+	// Comisión es el porcentaje de comisión que se le aplica al conductor.
+	Comisión float64 `json:"comision"`
 
 	// Estado es el estado en el que se encuentra el conductor. Puede ser
 	// "activo", "inactivo" o "suspendido".

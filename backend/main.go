@@ -99,39 +99,87 @@ func main() {
 		log.Fatalf("Error al migrar los modelos a la base de datos: %v", err)
 	}
 
-	randomPassword := "test1234"
+	var admin models.Administrador
+	if err := db.First(&admin).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			randomPassword := "PiritaAdmin"
 
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(randomPassword), bcrypt.DefaultCost)
+			hashedPassword, err := bcrypt.GenerateFromPassword([]byte(randomPassword), bcrypt.DefaultCost)
 
-	if err != nil {
-		log.Fatalf("Error al generar la contraseña aleatoria: %v", err)
+			if err != nil {
+				log.Fatalf("Error al generar la contraseña aleatoria: %v", err)
+			}
+
+			// Crear registros de prueba utilizando GORM
+			conductor := models.Conductor{
+				Nombre:    "Conductor",
+				Apellidos: "Pirita",
+				CURP: "PIRP-00000000000000",
+				ClaveINE: "PIRP-00000000000000",
+				RFC: "PIRP-00000000000000",
+				Salario: 50.00,
+				Comisión: 10,
+				Estado: "Activo",
+				Usuario: "conductor",
+				Correo: "conductor@pirita.com",
+				Password: "conductordemo",
+			}
+
+			db.Create(&conductor)
+
+			vehiculo := models.Vehiculo{
+				Fabricante: "Bentley",
+				Marca: "Continental GT",
+				Modelo: 2015,
+				Placas: "FUK-04-EVA",
+				Color: "manzana",
+				VigenciaTec: "28-05-2023",
+				Seguro: true,
+				Estado: "Activo",
+			}
+			db.Create(&vehiculo)
+
+			contrato := models.Contrato{
+				ConductorID: conductor.ID,
+				VehiculoID: vehiculo.ID,
+				FechaInicio: "28-05-2023",
+				FechaFin: "28-06-2023",
+				Comisiones: 10,
+			}
+			db.Create(&contrato)
+
+			viaje := models.Viaje{
+				ConductorID: conductor.ID,
+				VehiculoID: vehiculo.ID,
+				Fecha: "28-05-2023",
+				Monto: 50.0,
+			}
+			db.Create(&viaje)
+
+			pago := models.Pago{
+				ConductorID: conductor.ID,
+				Fecha: "28-05-2023",
+				Cantidad: 15.0,
+				Notas: "Sin comentarios",
+			}
+			db.Create(&pago)
+
+			admin := models.Administrador{
+				Nombre:    "Administrador",
+				Apellidos: "Pirita",
+				Usuario:   "admin",
+				Correo:    "admin@pirita.com",
+				Password:  string(hashedPassword),
+			}
+
+			db.Create(&admin)
+
+			// Imprimir los detalles de la cuenta de administrador en la terminal.
+			fmt.Printf("Cuenta de administrador creada con éxito.\nUsuario: %s\nContraseña: %s\n", admin.Usuario, randomPassword)
+		} else {
+			log.Fatalf("Error al buscar la cuenta de administrador: %v", err)
+		}
 	}
-
-	log.Printf("Guarde bien esta contraseña, es la única vez que la verá: %s", randomPassword)
-
-	admin := models.Administrador{
-		Nombre:    "Administrador",
-		Apellidos: "Pirita",
-		Usuario:   "admin",
-		Correo:    "admin@pirita.com",
-		Password:  string(hashedPassword),
-	}
-
-	// Crear el administrador por defecto.
-	db.Create(&admin)
-
-	// Sentencias para llenar la base de datos con datos de prueba
-	// Un registro de prueba para cada tabla
-	states := `
-		INSERT INTO conductors(nombre, apellidos, curp, clave_ine, salario, estado) VALUES('Yo', ':3xd', ':3xY666666HCSFUK02', 'claveineYoxd', 150.0, 'Pasivo');
-		INSERT INTO vehiculos(fabricante, marca, modelo, placas, color, vigencia_tec, seguro, estado) VALUES('Bentley', 'Continental GT', 2015, 'FUK-04-EVA', 'manzana', 'Simónxd', 'Tambiénxd', 'Sin defensa trasera');                
-		INSERT INTO contratos(conductor_id, vehiculo_id, fecha_inicio, fecha_fin, comisiones) VALUES(1, 1, '28-05-2023', '28-06-2023', 10);
-		INSERT INTO viajes(conductor_id, vehiculo_id, fecha, monto) VALUES(1, 1, '28-05-2023', 50.0);
-		INSERT INTO pagos(conductor_id, fecha, cantidad, notas) VALUES(1, '28-05-2023', 15.0, 'Sin comentarios');
-	`
-
-	// Ejecutar sentencias con cadenas de SQL en crudo
-	db.Exec(states)
 
 	// Crear la aplicación de Fiber.
 	app := fiber.New()
