@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { user } from '$lib/helpers/store';
 	import { goto } from '$app/navigation';
 
 	let usuario = '';
@@ -16,21 +17,24 @@
 			})
 		});
 
-		if (response.ok) {
-			const { token } = await response.json();
-			localStorage.setItem('jwt', token);
-			// Redirigir a la página de inicio dependiendo de la llave
-			// "type" del JWT, si es "admin" redirigir a la página de
-			// administrador, si es "conductor" redirigir a la página de
-			// usuario normal.
-			if (token.type === 'admin') {
-				goto('/admin');
-			} else if (token.type === 'conductor') {
-				goto('/conductor');
-			}
-		} else {
-			alert('Inicio de sesión fallido: Usuario o contraseña incorrectos');
-		}
+        const data = await response.json();
+
+        if (data.token) {
+            user.update((_) => {
+                return {
+                    token: data.token,
+                    role: data.type,
+                    isAuthenticated: true
+                };
+            });
+            if (data.type === 'admin') {
+                goto('/admin');
+            } else if (data.type === 'conductor') {
+                goto('/conductor');
+            }
+        } else {
+            alert('Inicio de sesión fallido: Usuario o contraseña incorrectos');
+        }
 	};
 </script>
 
