@@ -102,15 +102,33 @@ func main() {
 	var admin models.Administrador
 	if err := db.First(&admin).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
-			randomPassword := "PiritaAdmin"
+			DefaultAdminPassword := "PiritaAdmin"
+			DefaultUserPassword := "conductordemo"
 
-			hashedPassword, err := bcrypt.GenerateFromPassword([]byte(randomPassword), bcrypt.DefaultCost)
+			AdminHashedPassword, err := bcrypt.GenerateFromPassword([]byte(DefaultAdminPassword), bcrypt.DefaultCost)
 
 			if err != nil {
-				log.Fatalf("Error al generar la contraseña aleatoria: %v", err)
+				log.Fatalf("Error al generar la contraseña aleatoria para el administrador: %v", err)
+			}
+
+
+			UserHashedPassword, err := bcrypt.GenerateFromPassword([]byte(DefaultUserPassword), bcrypt.DefaultCost)
+
+			if err != nil {
+				log.Fatalf("Error al generar la contraseña aleatoria para el usuario común: %v", err)
 			}
 
 			// Crear registros de prueba utilizando GORM
+			admin := models.Administrador{
+				Nombre:    "Administrador",
+				Apellidos: "Pirita",
+				Usuario:   "admin",
+				Correo:    "admin@pirita.com",
+				Password:  string(AdminHashedPassword),
+			}
+
+			db.Create(&admin)
+
 			conductor := models.Conductor{
 				Nombre:    "Conductor",
 				Apellidos: "Pirita",
@@ -122,7 +140,7 @@ func main() {
 				Estado: "Activo",
 				Usuario: "conductor",
 				Correo: "conductor@pirita.com",
-				Password: "conductordemo",
+				Password: string(UserHashedPassword),
 			}
 
 			db.Create(&conductor)
@@ -164,18 +182,9 @@ func main() {
 			}
 			db.Create(&pago)
 
-			admin := models.Administrador{
-				Nombre:    "Administrador",
-				Apellidos: "Pirita",
-				Usuario:   "admin",
-				Correo:    "admin@pirita.com",
-				Password:  string(hashedPassword),
-			}
-
-			db.Create(&admin)
-
 			// Imprimir los detalles de la cuenta de administrador en la terminal.
-			fmt.Printf("Cuenta de administrador creada con éxito.\nUsuario: %s\nContraseña: %s\n", admin.Usuario, randomPassword)
+			fmt.Printf("Cuenta de administrador creada con éxito.\nUsuario: %s\nContraseña: %s\n", admin.Usuario, DefaultAdminPassword)
+			fmt.Printf("Cuenta de usuario común creada con éxito.\nUsuario: %s\nContraseña: %s\n", conductor.Usuario, DefaultUserPassword)
 		} else {
 			log.Fatalf("Error al buscar la cuenta de administrador: %v", err)
 		}

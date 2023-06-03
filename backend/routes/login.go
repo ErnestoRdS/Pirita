@@ -40,12 +40,17 @@ func LoginRouter(app *fiber.App, db *gorm.DB) {
 				return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
 					"message": "Usuario no encontrado.",
 				})
+			} else {
+				// Comprobar la contraseña del conductor.
+				if err := bcrypt.CompareHashAndPassword([]byte(conductor.Password), []byte(input.Password)); err != nil {
+					return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+						"message": "Contraseña incorrecta.",
+					})
+				}
 			}
-		}
-
-		// Comprobar la contraseña.
-		if err := bcrypt.CompareHashAndPassword([]byte(admin.Password), []byte(input.Password)); err != nil {
-			if err := bcrypt.CompareHashAndPassword([]byte(conductor.Password), []byte(input.Password)); err != nil {
+		} else {
+			// Comprobar la contraseña del administrador.
+			if err := bcrypt.CompareHashAndPassword([]byte(admin.Password), []byte(input.Password)); err != nil {
 				return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 					"message": "Contraseña incorrecta.",
 				})
