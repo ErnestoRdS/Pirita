@@ -29,7 +29,7 @@ type Conductor struct {
 	Salario float64 `json:"salario"`
 
 	// Comisión es el porcentaje de comisión que se le aplica al conductor.
-	Comisión float64 `json:"comision"`
+	Comisiones float64 `json:"comisiones"`
 
 	// Estado es el estado en el que se encuentra el conductor. Puede ser
 	// "activo", "inactivo" o "suspendido".

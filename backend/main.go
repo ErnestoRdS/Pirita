@@ -118,7 +118,7 @@ func main() {
 				ClaveINE: "PIRP-00000000000000",
 				RFC: "PIRP-00000000000000",
 				Salario: 50.00,
-				Comisión: 10,
+				Comisiones: 10,
 				Estado: "Activo",
 				Usuario: "conductor",
 				Correo: "conductor@pirita.com",
