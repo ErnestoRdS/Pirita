@@ -25,6 +25,10 @@ authenticate_admin() {
     echo "Error: No se pudo realizar la solicitud HTTP"
     exit 1
   else
+	if [ "$response" == '{"message":"Contraseña incorrecta."}' ]; then
+	  		echo "Error: Contraseña incorrecta."
+			exit 1
+	fi
     echo "Se inició sesión correctamente como admin $username con la contraseña $password y el token $response"
   fi
 }
@@ -40,6 +44,10 @@ authenticate_conductor() {
     echo "Error: No se pudo realizar la solicitud HTTP"
     exit 1
   else
+	if [ "$response" == '{"message":"Contraseña incorrecta."}' ]; then
+	  		echo "Error: Contraseña incorrecta."
+			exit 1
+	fi
     echo "Se inició sesión correctamente como conductor $username con la contraseña $password y el token $response"
   fi
 }
