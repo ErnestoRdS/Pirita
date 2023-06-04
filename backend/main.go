@@ -111,7 +111,6 @@ func main() {
 				log.Fatalf("Error al generar la contraseña aleatoria para el administrador: %v", err)
 			}
 
-
 			UserHashedPassword, err := bcrypt.GenerateFromPassword([]byte(DefaultUserPassword), bcrypt.DefaultCost)
 
 			if err != nil {
@@ -130,55 +129,55 @@ func main() {
 			db.Create(&admin)
 
 			conductor := models.Conductor{
-				Nombre:    "Conductor",
-				Apellidos: "Pirita",
-				CURP: "PIRP-00000000000000",
-				ClaveINE: "PIRP-00000000000000",
-				RFC: "PIRP-00000000000000",
-				Salario: 50.00,
+				Nombre:     "Conductor",
+				Apellidos:  "Pirita",
+				CURP:       "PIRP-00000000000000",
+				ClaveINE:   "PIRP-00000000000000",
+				RFC:        "PIRP-00000000000000",
+				Salario:    50.00,
 				Comisiones: 10,
-				Estado: "Activo",
-				Usuario: "conductor",
-				Correo: "conductor@pirita.com",
-				Password: string(UserHashedPassword),
+				Estado:     "Activo",
+				Usuario:    "conductor",
+				Correo:     "conductor@pirita.com",
+				Password:   string(UserHashedPassword),
 			}
 
 			db.Create(&conductor)
 
 			vehiculo := models.Vehiculo{
-				Fabricante: "Bentley",
-				Marca: "Continental GT",
-				Modelo: 2015,
-				Placas: "FUK-04-EVA",
-				Color: "manzana",
+				Fabricante:  "Bentley",
+				Marca:       "Continental GT",
+				Modelo:      2015,
+				Placas:      "FUK-04-EVA",
+				Color:       "manzana",
 				VigenciaTec: "28-05-2023",
-				Seguro: true,
-				Estado: "Activo",
+				Seguro:      true,
+				Estado:      "Activo",
 			}
 			db.Create(&vehiculo)
 
 			contrato := models.Contrato{
 				ConductorID: conductor.ID,
-				VehiculoID: vehiculo.ID,
+				VehiculoID:  vehiculo.ID,
 				FechaInicio: "28-05-2023",
-				FechaFin: "28-06-2023",
-				Comisiones: 10,
+				FechaFin:    "28-06-2023",
+				Comisiones:  10,
 			}
 			db.Create(&contrato)
 
 			viaje := models.Viaje{
 				ConductorID: conductor.ID,
-				VehiculoID: vehiculo.ID,
-				Fecha: "28-05-2023",
-				Monto: 50.0,
+				VehiculoID:  vehiculo.ID,
+				Fecha:       "28-05-2023",
+				Monto:       50.0,
 			}
 			db.Create(&viaje)
 
 			pago := models.Pago{
 				ConductorID: conductor.ID,
-				Fecha: "28-05-2023",
-				Cantidad: 15.0,
-				Notas: "Sin comentarios",
+				Fecha:       "28-05-2023",
+				Cantidad:    15.0,
+				Notas:       "Sin comentarios",
 			}
 			db.Create(&pago)
 
