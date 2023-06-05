@@ -7,5 +7,5 @@ import { writable } from 'svelte/store';
 export const user = writable({
 	token: '', // Token de autenticación
 	role: '', // Rol del usuario
-	isAuthenticated: false, // Indica si el usuario está autenticado
+	isAuthenticated: false // Indica si el usuario está autenticado
 });

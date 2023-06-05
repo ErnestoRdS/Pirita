@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { user } from '$lib/helpers/store';
+	import { user } from '$lib/helpers/store';
 	import { goto } from '$app/navigation';
 
 	let usuario = '';
@@ -17,33 +17,33 @@
 			})
 		});
 
-        const data = await response.json();
+		const data = await response.json();
 
-        if (data.token) {
-            user.update((_) => {
-                return {
-                    token: data.token,
-                    role: data.type,
-                    isAuthenticated: true
-                };
-            });
-            if (data.type === 'admin') {
-                goto('/admin');
-            } else if (data.type === 'conductor') {
-                goto('/conductor');
-            }
-        } else {
-            alert('Inicio de sesión fallido: Usuario o contraseña incorrectos');
-        }
+		if (data.token) {
+			user.update((_) => {
+				return {
+					token: data.token,
+					role: data.type,
+					isAuthenticated: true
+				};
+			});
+			if (data.type === 'admin') {
+				goto('/admin');
+			} else if (data.type === 'conductor') {
+				goto('/conductor');
+			}
+		} else {
+			alert('Inicio de sesión fallido: Usuario o contraseña incorrectos');
+		}
 	};
 </script>
 
-<section class="h-50 text-center">
+<section class="h-50 text-center pirita-head">
 	<div class="circle" />
 </section>
 
-<section class="d-flex text-center">
-	<section class="container-fluid pirita-body">
+<section class="d-flex text-center pirita-body">
+	<section class="container-fluid">
 		<div class="container my-5">
 			<svg xmlns="http://www.w3.org/2000/svg" width="105" height="67" fill="none"
 				><path
@@ -126,13 +126,17 @@
 		background-color: #839ab4;
 	}
 
+    .pirita-head {
+        background-color: #fafafa;
+    }
+
 	.circle {
 		width: 7em;
 		height: 7em;
 		background-color: #a57d31;
 		border-radius: 50%;
 		margin: 0 auto;
-		margin-top: 20%;
+		margin-top: 5%;
 		margin-bottom: -2em;
 		/* Always on top */
 		position: relative;
