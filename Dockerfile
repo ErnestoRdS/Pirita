@@ -19,7 +19,7 @@ WORKDIR /app
 COPY --from=backend /app/backend/backend /app/backend
 COPY --from=frontend /app/frontend/build /app/frontend
 
-EXPOSE 3000
+EXPOSE 8080
 EXPOSE 5173
 
 CMD ["./app/backend"]
