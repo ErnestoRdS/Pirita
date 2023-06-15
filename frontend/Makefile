@@ -12,6 +12,14 @@ debug:
 	npm install
 	npm run dev
 
+dev:
+	$(MAKE) debug
+
+# Run this to format your code.
+format:
+	npm install
+	npm run format
+
 # Run this before pushing to git.
 test_before_push:
 	npm install
